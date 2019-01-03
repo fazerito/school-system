@@ -1,0 +1,48 @@
+﻿@model IEnumerable<SchoolProject.Models.Teachers>
+
+@{
+    ViewData["Title"] = "List of teachers";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Get</h2>
+
+<p>
+    <a asp-action="Create">Add teacher</a>
+</p>
+<table class="table">
+    <thead>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.PersonalData.FullName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsEducator)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PersonalData.Email)
+        </th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.PersonalData.FullName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsEducator)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PersonalData.Email)
+        </td>
+        <td>
+            <a asp-action="Edit" asp-route-id="@item.TeacherId">Edit</a> |
+            <a asp-action="Details" asp-route-id="@item.TeacherId">Details</a> |
+            <a asp-action="Delete" asp-route-id="@item.TeacherId">Delete</a>
+        </td>
+    </tr>
+}
+    </tbody>
+</table>
