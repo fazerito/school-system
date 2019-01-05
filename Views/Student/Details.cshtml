@@ -1,0 +1,86 @@
+﻿@model SchoolProject.Models.Students
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Students</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.PersonalData.FullName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PersonalData.FullName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Class)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Class.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PersonalData.Pesel)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PersonalData.Pesel)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PersonalData.DateOfBirth)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PersonalData.DateOfBirth)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PersonalData.Address.City)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PersonalData.Address.City)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PersonalData.Address.StreetName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PersonalData.Address.StreetName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PersonalData.Address.StreetNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PersonalData.Address.StreetNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PersonalData.Address.AptNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PersonalData.Address.AptNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PersonalData.Address.ZipCode)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PersonalData.Address.ZipCode)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.StudentId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
