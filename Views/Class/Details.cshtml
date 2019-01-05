@@ -1,0 +1,45 @@
+﻿@model SchoolProject.Models.Classes
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Classes</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            Educator
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Teacher.PersonalData.FullName)
+        </dd>
+        
+        @if (Model.Students.Count > 0)
+        {
+            
+        <h4>Students in class:</h4>
+            
+            <ol>
+                @foreach (var student in Model.Students)
+                {
+                    <li><a asp-controller="Student" asp-action="Details" 
+                           asp-route-id="@student.StudentId">@student.PersonalData.FullName</a></li>
+                }
+            </ol>
+        }      
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.ClassId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
