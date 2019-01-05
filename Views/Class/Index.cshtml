@@ -23,13 +23,16 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+        @foreach (var item in Model) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Teacher.PersonalData.FullName)
+                <a asp-controller="Teacher" asp-action="Details" asp-route-id="@item.Teacher.TeacherId">
+                    @Html.DisplayFor(modelItem => item.Teacher.PersonalData.FullName)
+                </a>
+                
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ClassId">Edit</a> |
