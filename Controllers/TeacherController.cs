@@ -72,13 +72,27 @@ namespace SchoolProject.Controllers
 
                 var teachersQuali = context.Teachers
                     .Where(t => t.TeacherId == id)
-                    .SelectMany(c => c.QualificationTeachers).ToList();
+                    .SelectMany(c => c.QualificationTeachers)
+                    .Where(c => c.TeacherTeacherId == id)
+                    .Include(c => c.QualificationQualification)
+                    .ToList();
 
-                var vm = context.Teachers
+                var teacherPersonal = context.Teachers
                     .Where(t => t.TeacherId == id)
-                    .Include(p => p.PersonalData)
-                    .Include(a => a.PersonalData.Address).ToList();
+                    .Select(t => t.PersonalData)
+                    .FirstOrDefault();
+
+                var teacherAddress = context.Teachers
+                    .Where(t => t.TeacherId == id)
+                    .Select(t => t.PersonalData.Address)
+                    .FirstOrDefault();
+
+
                 teacher.QualificationTeachers = teachersQuali;
+                teacher.PersonalData = teacherPersonal;
+                teacher.PersonalData.Address = teacherAddress;
+
+
                 return View(teacher);
             }
                 
