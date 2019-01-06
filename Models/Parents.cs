@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace SchoolProject.Models
 {
@@ -12,6 +13,7 @@ namespace SchoolProject.Models
         }
 
         public int ParentId { get; set; }
+        [Required]
         public int PersonalDataId { get; set; }
 
         public PersonalDatas PersonalData { get; set; }

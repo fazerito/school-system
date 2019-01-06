@@ -13,6 +13,7 @@ namespace SchoolProject.ViewModels
         public Teachers Teacher { get; set; }
         public PersonalDatas PersonalData { get; set; }
         public Addresses Address { get; set; }
+        [Required]
         public Users User { get; set; }
     }
 }

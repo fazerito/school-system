@@ -12,13 +12,18 @@ namespace SchoolProject.Models
         }
 
         public int LessonId { get; set; }
+        [Required]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime Date { get; set; }
+        [Required]
         public int SubjectId { get; set; }
+        [Required]
         [Display(Name = "Day")]
         public int DayOfWeek { get; set; }
+        [Required]
         public TimeSpan StartTime { get; set; }
+        [Required]
         public int ClassId { get; set; }
 
         public Classes Class { get; set; }

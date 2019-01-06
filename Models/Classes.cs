@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace SchoolProject.Models
 {
@@ -12,7 +13,9 @@ namespace SchoolProject.Models
         }
 
         public int ClassId { get; set; }
+        [Required]
         public string Name { get; set; }
+        [Required]
         public int TeacherId { get; set; }
 
         public Teachers Teacher { get; set; }

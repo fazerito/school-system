@@ -40,7 +40,7 @@ namespace SchoolProject.Controllers
                     var logins = context.Users.Select(u => u.Login).ToList();
                     if (logins.Contains(model.User.Login))
                     {
-                        return View("Error");
+                        return NotFound("login already exists");
                     }
 
                     context.Addresses.Add(model.Address);

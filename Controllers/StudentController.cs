@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SchoolProject.Models;
+using SchoolProject.ViewModels;
 
 namespace SchoolProject.Controllers
 {
@@ -70,9 +71,10 @@ namespace SchoolProject.Controllers
         // GET: Student/Create
         public IActionResult Create()
         {
-            ViewData["ClassId"] = new SelectList(_context.Classes, "ClassId", "Name");
-            ViewData["ParentId"] = new SelectList(_context.Parents, "ParentId", "ParentId");
-            ViewData["PersonalDataId"] = new SelectList(_context.PersonalDatas, "PersonalDataId", "FirstName");
+            //ViewData["ClassId"] = new SelectList(_context.Classes, "ClassId", "Name");
+            //ViewData["ParentId"] = new SelectList(_context.Parents, "ParentId", "ParentId");
+            //ViewData["PersonalDataId"] = new SelectList(_context.PersonalDatas, "PersonalDataId", "FirstName");
+
             return View();
         }
 
@@ -81,18 +83,23 @@ namespace SchoolProject.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("StudentId,ParentId,ClassId,PersonalDataId")] Students students)
+        public async Task<IActionResult> Create([Bind("ClassId")] StudentViewModel model)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(students);
+                _context.Addresses.Add(model.Address);
+                model.PersonalData.AddressId = model.Address.AddressId;
+                _context.PersonalDatas.Add(model.PersonalData);
+                _context.Students.Add(model.Student);
+                model.Student.PersonalDataId = model.PersonalData.PersonalDataId;
+                
+
+                _context.SaveChanges();
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClassId"] = new SelectList(_context.Classes, "ClassId", "Name", students.ClassId);
-            ViewData["ParentId"] = new SelectList(_context.Parents, "ParentId", "ParentId", students.ParentId);
-            ViewData["PersonalDataId"] = new SelectList(_context.PersonalDatas, "PersonalDataId", "FirstName", students.PersonalDataId);
-            return View(students);
+            ViewData["ClassId"] = new SelectList(_context.Classes, "ClassId", "Name", model.Classes.ClassId);
+            return View(model);
         }
 
         // GET: Student/Edit/5
