@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace SchoolProject.Models
 {
-    public class Roles  : IdentityRole
+    public class Roles 
     {
         [Key, Required]
         public int RoleId { get; set; }

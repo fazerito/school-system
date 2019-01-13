@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -32,6 +33,19 @@ namespace SchoolProject.Controllers
         [Route("teachers/add")]
         public IActionResult Create()
         {
+            using (var context = new SchoolDbContext())
+            {
+                var teacherId = context.Users
+                    .Where(u => u.Login == User.Identity.Name)
+                    .Select(u => u.TeacherId)
+                    .FirstOrDefault();
+                if (teacherId == null)
+                {
+                    TempData["message"] = "Brak wymaganych uprawnien."
+                    return RedirectToAction("Index", "Home");
+                }
+            }
+
             return View();
         }
 
@@ -42,6 +56,13 @@ namespace SchoolProject.Controllers
         {
             using (var context = new SchoolDbContext())
             {
+                var teacherId = context.Users
+                    .Where(u => u.Login == User.Identity.Name)
+                    .Select(u => u.TeacherId)
+                    .FirstOrDefault();
+                if (teacherId == null)
+                    return RedirectToAction("Index", "Home");
+
                 if (ModelState.IsValid)
                 {
                     var logins = context.Users.Select(u => u.Login).ToList();
@@ -59,26 +80,25 @@ namespace SchoolProject.Controllers
                     //context.Addresses.Add(address);
                     await context.SaveChangesAsync();
 
-                    //var pdata = model.PersonalData;
-                    //pdata.Address = address;
-                    //context.PersonalDatas.Add(pdata);
-                    //await context.SaveChangesAsync();
+                    var pdata = model.PersonalData;
+                    pdata.Address = model.Address;
+                    context.PersonalDatas.Add(pdata);
+                    await context.SaveChangesAsync();
 
-
-                    context.Teachers.Add(model.Teacher);
+                    var teacher = model.Teacher;
+                    teacher.PersonalData = pdata;
+                    context.Teachers.Add(teacher);
 
                     await context.SaveChangesAsync();
                     var user = new Users
                     {
                         Login = model.User.Login,
                         Password = model.User.Password,
+                        TeacherId = teacher.TeacherId
                     };
 
                     var result = await _userManager.CreateAsync(user, user.Password);
-                    if (result.Succeeded)
-                        await _userManager.AddToRoleAsync(user, "Teacher");
-                    //context.Users.Add(user);
-
+                    
                     await context.SaveChangesAsync();
 
                     return RedirectToAction("Get");

@@ -36,12 +36,12 @@ namespace SchoolProject
                 options.MinimumSameSitePolicy = SameSiteMode.None;
 
             });
-
+            services.AddTransient<IUserStore<Users>, UserStore>();
+            services.AddTransient<IRoleStore<UserRole>, RoleStore>();
             services.AddIdentity<Users, UserRole>()
               .AddDefaultTokenProviders();
             
-            services.AddTransient<IUserStore<Users>, UserStore>();
-            services.AddTransient<IRoleStore<UserRole>, RoleStore>();
+            
 
             services.ConfigureApplicationCookie(options =>
             {
