@@ -14,99 +14,93 @@
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
+            
             <div class="form-group">
-                <label asp-for="Classes.ClassId" class="control-label"></label>
-                <select asp-for="Classes.ClassId" class="form-control" asp-items="ViewBag.ClassId"></select>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.PersonalData.FirstName, "First Name", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.PersonalData.FirstName, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.PersonalData.FirstName, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.PersonalData.LastName, "Last Name", htmlAttributes: new { @class = "control-label" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.PersonalData.LastName, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.PersonalData.LastName, "", new { @class = "text-danger" })
-                </div>
+                <label asp-for="User.Login" class="control-label"></label>
+                <input asp-for="User.Login" class="form-control"/>
+                @Html.ValidationMessageFor(model => model.User.Login, "", new {@class = "text-danger"})
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(model => model.PersonalData.DateOfBirth, "Date of birth", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.PersonalData.DateOfBirth, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.PersonalData.DateOfBirth, "", new { @class = "text-danger" })
-                </div>
+                <label asp-for="User.Password" class="control-label"></label>
+                <input asp-for="User.Password" class="form-control"/>
+                @Html.ValidationMessageFor(model => model.User.Password, "", new { @class = "text-danger" })
             </div>
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.PersonalData.Gender, "Gender", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.DropDownList("Gender", Html.GetEnumSelectList<Gender>(), "Select Gender", htmlAttributes: new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.PersonalData.Gender, "", new { @class = "text-danger" })
-                </div>
-            </div>
+            
+            
 
             <div class="form-group">
-                @Html.LabelFor(model => model.PersonalData.Pesel, "Pesel", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.PersonalData.Pesel, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.PersonalData.Pesel, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.PersonalData.Email, "Email", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.PersonalData.Email, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.PersonalData.Email, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.Address.City, "City", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Address.City, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Address.City, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.Address.StreetName, "Street Name", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Address.StreetName, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Address.StreetName, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.Address.StreetNumber, "Street Number", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Address.StreetNumber, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Address.StreetNumber, "", new { @class = "text-danger" })
-                </div>
+                <label asp-for="PersonalData.FirstName" class="control-label"></label>
+                <input asp-for="PersonalData.FirstName" class="form-control" />
+                @Html.ValidationMessageFor(model => model.PersonalData.FirstName, "", new { @class = "text-danger" })
             </div>
 
 
             <div class="form-group">
-                @Html.LabelFor(model => model.Address.AptNumber, "Apartment Number", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Address.AptNumber, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Address.AptNumber, "", new { @class = "text-danger" })
-                </div>
+                <label asp-for="PersonalData.LastName" class="control-label"></label>
+                <input asp-for="PersonalData.LastName" class="form-control" />
+                @Html.ValidationMessageFor(model => model.PersonalData.LastName, "", new { @class = "text-danger" })
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(model => model.Address.ZipCode, "Zip Code", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Address.ZipCode, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Address.ZipCode, "", new { @class = "text-danger" })
-                </div>
+                <label asp-for="PersonalData.DateOfBirth"></label>
+                <input asp-for="PersonalData.DateOfBirth" class="form-control" />
+                @Html.ValidationMessageFor(model => model.PersonalData.DateOfBirth, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                <label asp-for="PersonalData.Gender" class="control-label"></label>
+                @Html.DropDownList("Gender", Html.GetEnumSelectList<Gender>(), "Select Gender", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.PersonalData.Gender, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                <label asp-for="PersonalData.Pesel" class="control-label"></label>
+                <input asp-for="PersonalData.Pesel" class="form-control" />
+                @Html.ValidationMessageFor(model => model.PersonalData.Pesel, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                <label asp-for="PersonalData.Email" class="control-label"></label>
+                <input asp-for="PersonalData.Email" class="form-control" />
+                @Html.ValidationMessageFor(model => model.PersonalData.Email, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Address.City" class="control-label"></label>
+                <input asp-for="Address.City" class="form-control" />
+                @Html.ValidationMessageFor(model => model.Address.City, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Address.StreetName" class="control-label"></label>
+                <input asp-for="Address.StreetName" class="form-control" />
+                @Html.ValidationMessageFor(model => model.Address.StreetName, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Address.StreetNumber" class="control-label"></label>
+                <input asp-for="Address.StreetNumber" class="form-control" />
+                @Html.ValidationMessageFor(model => model.Address.StreetNumber, "", new { @class = "text-danger" })
+            </div>
+
+
+            <div class="form-group">
+                <label asp-for="Address.AptNumber" class="control-label"></label>
+                <input asp-for="Address.AptNumber" class="form-control" />
+                @Html.ValidationMessageFor(model => model.Address.AptNumber, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Address.ZipCode" class="control-label"></label>
+                <input asp-for="Address.ZipCode" class="form-control" />
+                @Html.ValidationMessageFor(model => model.Address.ZipCode, "", new { @class = "text-danger" })
+            </div>
+            
+            <div class="form-group">
+                <label class="control-label">Class</label>
+                <select asp-for="Classes.Name" class="form-control" asp-items="ViewBag.ClassId"></select>
             </div>
 
             <div class="form-group">

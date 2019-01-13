@@ -1,8 +1,5 @@
-﻿using SchoolProject.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using SchoolProject.Models;
 
 namespace SchoolProject.ViewModels
 {
@@ -12,5 +9,6 @@ namespace SchoolProject.ViewModels
         public PersonalDatas PersonalData { get; set; }
         public Addresses Address { get; set; }
         public Classes Classes { get; set; }
+        public Users User { get; set; }
     }
 }

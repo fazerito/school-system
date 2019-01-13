@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+﻿using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SchoolProject.Models;
@@ -12,6 +10,15 @@ namespace SchoolProject.Controllers
 {
     public class TeacherController : Controller
     {
+        private SignInManager<Users> _signManager;
+        private UserManager<Users> _userManager;
+
+        public TeacherController(UserManager<Users> userManager, SignInManager<Users> signManager)
+        {
+            _signManager = signManager;
+            _userManager = userManager;
+        }
+
         [Route("teachers/get")]
         public IActionResult Get()
         {
@@ -31,7 +38,7 @@ namespace SchoolProject.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("teachers/add")]
-        public IActionResult Create(TeachersViewModel model)
+        public async Task<IActionResult> Create(TeachersViewModel model)
         {
             using (var context = new SchoolDbContext())
             {
@@ -43,15 +50,36 @@ namespace SchoolProject.Controllers
                         return NotFound("login already exists");
                     }
 
+                    //var address = model.Address;
                     context.Addresses.Add(model.Address);
-                    model.PersonalData.AddressId = model.Address.AddressId;
-                    context.PersonalDatas.Add(model.PersonalData);
-                    context.Teachers.Add(model.Teacher);
-                    model.Teacher.PersonalDataId = model.PersonalData.PersonalDataId;
-                    context.Users.Add(model.User);
-                    model.User.TeacherId = model.Teacher.TeacherId;
+                    //var pdata = model.PersonalData;
+                    //pdata.Address = address;
+                    //context.PersonalDatas.Add(pdata);
+                    //var address = model.Address;
+                    //context.Addresses.Add(address);
+                    await context.SaveChangesAsync();
 
-                    context.SaveChanges();
+                    //var pdata = model.PersonalData;
+                    //pdata.Address = address;
+                    //context.PersonalDatas.Add(pdata);
+                    //await context.SaveChangesAsync();
+
+
+                    context.Teachers.Add(model.Teacher);
+
+                    await context.SaveChangesAsync();
+                    var user = new Users
+                    {
+                        Login = model.User.Login,
+                        Password = model.User.Password,
+                    };
+
+                    var result = await _userManager.CreateAsync(user, user.Password);
+                    if (result.Succeeded)
+                        await _userManager.AddToRoleAsync(user, "Teacher");
+                    //context.Users.Add(user);
+
+                    await context.SaveChangesAsync();
 
                     return RedirectToAction("Get");
                 }
@@ -70,12 +98,16 @@ namespace SchoolProject.Controllers
                     return NotFound();
                 }
 
+                
+
+
                 var teachersQuali = context.Teachers
                     .Where(t => t.TeacherId == id)
                     .SelectMany(c => c.QualificationTeachers)
                     .Where(c => c.TeacherTeacherId == id)
                     .Include(c => c.QualificationQualification)
                     .ToList();
+                
 
                 var teacherPersonal = context.Teachers
                     .Where(t => t.TeacherId == id)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
 
 namespace SchoolProject.Models
 {
@@ -12,13 +13,13 @@ namespace SchoolProject.Models
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }
-        public int Type { get; set; }
-        public int? TeacherId { get; set; }
+
         public int? ParentId { get; set; }
+        public int? TeacherId { get; set; }
         public int? PrincipalId { get; set; }
 
+        public Teachers Teacher { get; set; }
         public Parents Parent { get; set; }
         public Principals Principal { get; set; }
-        public Teachers Teacher { get; set; }
     }
 }

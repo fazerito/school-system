@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Configuration;
@@ -32,6 +33,8 @@ namespace SchoolProject.Models
         public virtual DbSet<Subjects> Subjects { get; set; }
         public virtual DbSet<Teachers> Teachers { get; set; }
         public virtual DbSet<Users> Users { get; set; }
+        public virtual DbSet<Roles> Roles { get; set; }
+        public virtual DbSet<UserRole> UserRoles { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -274,21 +277,22 @@ namespace SchoolProject.Models
                     .IsRequired()
                     .HasMaxLength(30);
 
-                entity.HasOne(d => d.Parent)
-                    .WithMany(p => p.Users)
-                    .HasForeignKey(d => d.ParentId)
-                    .HasConstraintName("FK_dbo.Users_dbo.Parents_ParentId");
+                //entity.HasOne(d => d.Parent)
+                //    .WithMany(p => p.Users)
+                //    .HasForeignKey(d => d.ParentId)
+                //    .HasConstraintName("FK_dbo.Users_dbo.Parents_ParentId");
 
-                entity.HasOne(d => d.Principal)
-                    .WithMany(p => p.Users)
-                    .HasForeignKey(d => d.PrincipalId)
-                    .HasConstraintName("FK_dbo.Users_dbo.Principals_PrincipalId");
+                //entity.HasOne(d => d.Principal)
+                //    .WithMany(p => p.Users)
+                //    .HasForeignKey(d => d.PrincipalId)
+                //    .HasConstraintName("FK_dbo.Users_dbo.Principals_PrincipalId");
 
-                entity.HasOne(d => d.Teacher)
-                    .WithMany(p => p.Users)
-                    .HasForeignKey(d => d.TeacherId)
-                    .HasConstraintName("FK_dbo.Users_dbo.Teachers_TeacherId");
+                //entity.HasOne(d => d.Teacher)
+                //    .WithMany(p => p.Users)
+                //    .HasForeignKey(d => d.TeacherId)
+                //    .HasConstraintName("FK_dbo.Users_dbo.Teachers_TeacherId");
             });
         }
+        
     }
 }

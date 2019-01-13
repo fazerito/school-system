@@ -9,7 +9,6 @@ namespace SchoolProject.Models
         public Parents()
         {
             Students = new HashSet<Students>();
-            Users = new HashSet<Users>();
         }
 
         public int ParentId { get; set; }
@@ -18,6 +17,5 @@ namespace SchoolProject.Models
 
         public PersonalDatas PersonalData { get; set; }
         public ICollection<Students> Students { get; set; }
-        public ICollection<Users> Users { get; set; }
     }
 }

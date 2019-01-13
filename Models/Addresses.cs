@@ -19,10 +19,11 @@ namespace SchoolProject.Models
         [RegularExpression("^[a-zA-Z]+$")]
         public string City { get; set; }
         [Required]
-        [RegularExpression("^[a-zA-Z]+$")]
+        [Range(1, 999)]
         [Display(Name = "Street number")]
         public int StreetNumber { get; set; }
         [Display(Name = "Apartment number")]
+        [Range(1, 999)]
         public int? AptNumber { get; set; }
         [Required]
         [RegularExpression("^[0-9]{2}-[0-9]{3}")]

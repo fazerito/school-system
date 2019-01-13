@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Razor.Language.Intermediate;
 using Microsoft.EntityFrameworkCore;
 using SchoolProject.Models;
 using SchoolProject.ViewModels;
@@ -13,10 +15,14 @@ namespace SchoolProject.Controllers
     public class StudentController : Controller
     {
         private readonly SchoolDbContext _context;
+        private SignInManager<Users> _signManager;
+        private UserManager<Users> _userManager;
 
-        public StudentController(SchoolDbContext context)
+        public StudentController(SchoolDbContext context, UserManager<Users> userManager, SignInManager<Users> signManager)
         {
             _context = context;
+            _signManager = signManager;
+            _userManager = userManager;
         }
 
         // GET: Student
@@ -27,10 +33,8 @@ namespace SchoolProject.Controllers
                 .Include(s => s.Class)
                 .Include(s => s.PersonalData)
                 .ToList();
-
-            
-
             return View(students);
+
         }
 
         // GET: Student/Details/5
@@ -41,7 +45,7 @@ namespace SchoolProject.Controllers
                 return NotFound();
             }
 
-            var student =  _context.Students
+            var student = _context.Students
                 .Include(s => s.Class)
                 .Include(s => s.Parent)
                 .Include(s => s.PersonalData)
@@ -61,7 +65,6 @@ namespace SchoolProject.Controllers
                 .Select(s => s.PersonalData.Address)
                 .FirstOrDefault();
 
-
             student.PersonalData = studentPersonal;
             student.PersonalData.Address = studentAddress;
 
@@ -69,13 +72,13 @@ namespace SchoolProject.Controllers
         }
 
         // GET: Student/Create
+        [Route("students/add")]
         public IActionResult Create()
         {
-            //ViewData["ClassId"] = new SelectList(_context.Classes, "ClassId", "Name");
+            ViewData["ClassId"] = new SelectList(_context.Classes, "ClassId", "Name");
+            return View();
             //ViewData["ParentId"] = new SelectList(_context.Parents, "ParentId", "ParentId");
             //ViewData["PersonalDataId"] = new SelectList(_context.PersonalDatas, "PersonalDataId", "FirstName");
-
-            return View();
         }
 
         // POST: Student/Create
@@ -83,21 +86,21 @@ namespace SchoolProject.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ClassId")] StudentViewModel model)
+        [Route("students/add")]
+        public async Task<IActionResult> Create(StudentViewModel model)
         {
             if (ModelState.IsValid)
-            {
+            { 
                 _context.Addresses.Add(model.Address);
                 model.PersonalData.AddressId = model.Address.AddressId;
                 _context.PersonalDatas.Add(model.PersonalData);
                 _context.Students.Add(model.Student);
                 model.Student.PersonalDataId = model.PersonalData.PersonalDataId;
-                
 
-                _context.SaveChanges();
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["ClassId"] = new SelectList(_context.Classes, "ClassId", "Name", model.Classes.ClassId);
             return View(model);
         }
@@ -135,6 +138,7 @@ namespace SchoolProject.Controllers
 
             if (ModelState.IsValid)
             {
+
                 try
                 {
                     _context.Update(students);
@@ -151,12 +155,14 @@ namespace SchoolProject.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+
+                ViewData["ClassId"] = new SelectList(_context.Classes, "ClassId", "Name", students.ClassId);
+                ViewData["ParentId"] = new SelectList(_context.Parents, "ParentId", "ParentId", students.ParentId);
+                ViewData["PersonalDataId"] = new SelectList(_context.PersonalDatas, "PersonalDataId", "FirstName",
+                students.PersonalDataId);
+                return View(students);
             }
-            ViewData["ClassId"] = new SelectList(_context.Classes, "ClassId", "Name", students.ClassId);
-            ViewData["ParentId"] = new SelectList(_context.Parents, "ParentId", "ParentId", students.ParentId);
-            ViewData["PersonalDataId"] = new SelectList(_context.PersonalDatas, "PersonalDataId", "FirstName", students.PersonalDataId);
-            return View(students);
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Student/Delete/5
@@ -166,18 +172,20 @@ namespace SchoolProject.Controllers
             {
                 return NotFound();
             }
-
-            var students = await _context.Students
-                .Include(s => s.Class)
-                .Include(s => s.Parent)
-                .Include(s => s.PersonalData)
-                .FirstOrDefaultAsync(m => m.StudentId == id);
-            if (students == null)
+            using (var _context = new SchoolDbContext())
             {
-                return NotFound();
-            }
+                var students = await _context.Students
+                    .Include(s => s.Class)
+                    .Include(s => s.Parent)
+                    .Include(s => s.PersonalData)
+                    .FirstOrDefaultAsync(m => m.StudentId == id);
+                if (students == null)
+                {
+                    return NotFound();
+                }
 
-            return View(students);
+                return View(students);
+            }
         }
 
         // POST: Student/Delete/5
@@ -185,10 +193,13 @@ namespace SchoolProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+
             var students = await _context.Students.FindAsync(id);
             _context.Students.Remove(students);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+
+
         }
 
         private bool StudentsExists(int id)

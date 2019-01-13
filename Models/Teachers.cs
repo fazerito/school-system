@@ -12,7 +12,6 @@ namespace SchoolProject.Models
             Grades = new HashSet<Grades>();
             QualificationTeachers = new HashSet<QualificationTeachers>();
             Subjects = new HashSet<Subjects>();
-            Users = new HashSet<Users>();
         }
 
         public int TeacherId { get; set; }
@@ -26,6 +25,5 @@ namespace SchoolProject.Models
         public ICollection<Grades> Grades { get; set; }
         public ICollection<QualificationTeachers> QualificationTeachers { get; set; }
         public ICollection<Subjects> Subjects { get; set; }
-        public ICollection<Users> Users { get; set; }
     }
 }
