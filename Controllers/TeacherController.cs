@@ -25,6 +25,22 @@ namespace SchoolProject.Controllers
         {
             using (var context = new SchoolDbContext())
             {
+                var teacherId = context.Users
+                    .Where(u => u.Login == User.Identity.Name)
+                    .Select(u => u.TeacherId)
+                    .FirstOrDefault();
+
+                var principalId = context.Users
+                    .Where(u => u.Login == User.Identity.Name)
+                    .Select(u => u.PrincipalId)
+                    .FirstOrDefault();
+
+                if (teacherId == null && principalId == null)
+                {
+                    TempData["message"] = "Brak wymaganych uprawnien.";
+                    return RedirectToAction("Index", "Home");
+                }
+
                 var teachers = context.Teachers.Include(p => p.PersonalData).ToList();
                 return View(teachers);
             }
@@ -39,9 +55,15 @@ namespace SchoolProject.Controllers
                     .Where(u => u.Login == User.Identity.Name)
                     .Select(u => u.TeacherId)
                     .FirstOrDefault();
-                if (teacherId == null)
+
+                var principalId = context.Users
+                    .Where(u => u.Login == User.Identity.Name)
+                    .Select(u => u.PrincipalId)
+                    .FirstOrDefault();
+
+                if (teacherId == null && principalId == null)
                 {
-                    TempData["message"] = "Brak wymaganych uprawnien."
+                    TempData["message"] = "Brak wymaganych uprawnien.";
                     return RedirectToAction("Index", "Home");
                 }
             }
@@ -60,8 +82,17 @@ namespace SchoolProject.Controllers
                     .Where(u => u.Login == User.Identity.Name)
                     .Select(u => u.TeacherId)
                     .FirstOrDefault();
-                if (teacherId == null)
+
+                var principalId = context.Users
+                    .Where(u => u.Login == User.Identity.Name)
+                    .Select(u => u.PrincipalId)
+                    .FirstOrDefault();
+
+                if (teacherId == null && principalId == null)
+                {
+                    TempData["message"] = "Brak wymaganych uprawnien.";
                     return RedirectToAction("Index", "Home");
+                }
 
                 if (ModelState.IsValid)
                 {
@@ -110,8 +141,25 @@ namespace SchoolProject.Controllers
 
         public IActionResult Details(int? id)
         {
+
             using (var context = new SchoolDbContext())
             {
+                var teacherId = context.Users
+                    .Where(u => u.Login == User.Identity.Name)
+                    .Select(u => u.TeacherId)
+                    .FirstOrDefault();
+
+                var principalId = context.Users
+                    .Where(u => u.Login == User.Identity.Name)
+                    .Select(u => u.PrincipalId)
+                    .FirstOrDefault();
+
+                if (teacherId == null && principalId == null)
+                {
+                    TempData["message"] = "Brak wymaganych uprawnien.";
+                    return RedirectToAction("Index", "Home");
+                }
+
                 Teachers teacher = context.Teachers.Find(id);
                 if (teacher == null)
                 {

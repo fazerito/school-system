@@ -34,7 +34,6 @@ namespace SchoolProject.Controllers
                 .Include(s => s.PersonalData)
                 .ToList();
             return View(students);
-
         }
 
         // GET: Student/Details/5

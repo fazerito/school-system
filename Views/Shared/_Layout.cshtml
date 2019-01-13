@@ -29,16 +29,36 @@
                 <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">SchoolProject</a>
             </div>
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Teacher" asp-action="Get">Teachers</a></li>
-                    <li><a asp-area="" asp-controller="Student" asp-action="Index">Students</a></li>
-                    <li><a asp-area="" asp-controller="Class" asp-action="Index">Classes</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
-                </ul>
-                <ul class="navbar-nav navbar-right">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Login">Login</a></li>
-                </ul>
+
+                @if (!User.Identity.IsAuthenticated)
+                {
+                    <ul class="nav navbar-nav">
+                        <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a asp-area="" asp-controller="Home" asp-action="Login">Login</a></li>
+                    </ul>
+                }
+                else
+                {
+                    <ul class="nav navbar-nav">
+                        <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li><a asp-area="" asp-controller="Teacher" asp-action="Get">Teachers</a></li>
+                        <li><a asp-area="" asp-controller="Student" asp-action="Index">Students</a></li>
+                        <li><a asp-area="" asp-controller="Class" asp-action="Index">Classes</a></li>
+                        <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="nav-item">
+                            <form asp-controller="Home" asp-action="Logout" method="post" id="logoutForm" class="navbar-right">
+
+                                <button type="submit" class="btn btn-link navbar-btn nav-link">Log out</button>
+                            </form>
+                        </li>
+                        <li><a>Hello @User.Identity.Name!</a></li>
+                    </ul>
+                }
             </div>
         </div>
     </nav>
