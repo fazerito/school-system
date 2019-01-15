@@ -36,6 +36,7 @@ namespace SchoolProject.Controllers
             return View(students);
         }
 
+
         // GET: Student/Details/5
         public IActionResult Details(int? id)
         {
@@ -64,8 +65,28 @@ namespace SchoolProject.Controllers
                 .Select(s => s.PersonalData.Address)
                 .FirstOrDefault();
 
+            var studentGrades = _context.Students
+                .Where(s => s.StudentId == id)
+                .SelectMany(s => s.Grades)
+                .Where(s => s.StudentId == id)
+                .Include(s => s.Subject)
+                .OrderBy(s => s.Subject.Name)
+                .ToList();
+                //.Select(s => s.Grades)
+                //.FirstOrDefault();
+
+            var studentAttendances = _context.Students
+                .Where(s => s.StudentId == id)
+                .SelectMany(s => s.Attendances)
+                .Where(s => s.StudentId == id)
+                .Include(s => s.Lesson)
+                .Include(s => s.Lesson.Subject)
+                .ToList();
+            
             student.PersonalData = studentPersonal;
             student.PersonalData.Address = studentAddress;
+            student.Grades = studentGrades;
+            student.Attendances = studentAttendances;
 
             return View(student);
         }
