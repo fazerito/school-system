@@ -37,6 +37,7 @@ namespace SchoolProject.Migrations
                     b.Property<int>("StreetNumber");
 
                     b.Property<string>("ZipCode")
+                        .IsRequired()
                         .HasMaxLength(6);
 
                     b.HasKey("AddressId");
@@ -219,11 +220,7 @@ namespace SchoolProject.Migrations
                     b.Property<string>("Name")
                         .IsRequired();
 
-                    b.Property<int?>("TeachersTeacherId");
-
                     b.HasKey("QualificationId");
-
-                    b.HasIndex("TeachersTeacherId");
 
                     b.ToTable("Qualifications");
                 });
@@ -241,6 +238,26 @@ namespace SchoolProject.Migrations
                     b.HasIndex("TeacherTeacherId");
 
                     b.ToTable("QualificationTeachers");
+                });
+
+            modelBuilder.Entity("SchoolProject.Models.Roles", b =>
+                {
+                    b.Property<int>("RoleId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ConcurrencyStamp");
+
+                    b.Property<string>("Id");
+
+                    b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.Property<string>("NormalizedName");
+
+                    b.HasKey("RoleId");
+
+                    b.ToTable("Roles");
                 });
 
             modelBuilder.Entity("SchoolProject.Models.Students", b =>
@@ -301,6 +318,25 @@ namespace SchoolProject.Migrations
                     b.ToTable("Teachers");
                 });
 
+            modelBuilder.Entity("SchoolProject.Models.UserRole", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("RoleId");
+
+                    b.Property<int>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserRoles");
+                });
+
             modelBuilder.Entity("SchoolProject.Models.Users", b =>
                 {
                     b.Property<int>("UserId")
@@ -320,8 +356,6 @@ namespace SchoolProject.Migrations
                     b.Property<int?>("PrincipalId");
 
                     b.Property<int?>("TeacherId");
-
-                    b.Property<int>("Type");
 
                     b.HasKey("UserId");
 
@@ -417,13 +451,6 @@ namespace SchoolProject.Migrations
                         .HasConstraintName("FK_dbo.Principals_dbo.Teachers_PrincipalId");
                 });
 
-            modelBuilder.Entity("SchoolProject.Models.Qualifications", b =>
-                {
-                    b.HasOne("SchoolProject.Models.Teachers")
-                        .WithMany("Qualifications")
-                        .HasForeignKey("TeachersTeacherId");
-                });
-
             modelBuilder.Entity("SchoolProject.Models.QualificationTeachers", b =>
                 {
                     b.HasOne("SchoolProject.Models.Qualifications", "QualificationQualification")
@@ -433,8 +460,9 @@ namespace SchoolProject.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("SchoolProject.Models.Teachers", "TeacherTeacher")
-                        .WithMany()
+                        .WithMany("QualificationTeachers")
                         .HasForeignKey("TeacherTeacherId")
+                        .HasConstraintName("FK_dbo.QualificationTeachers_dbo.Teachers_Teacher_TeacherId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -474,22 +502,32 @@ namespace SchoolProject.Migrations
                         .HasConstraintName("FK_dbo.Teachers_dbo.PersonalDatas_PersonalDataId");
                 });
 
+            modelBuilder.Entity("SchoolProject.Models.UserRole", b =>
+                {
+                    b.HasOne("SchoolProject.Models.Roles", "Role")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("SchoolProject.Models.Users", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("SchoolProject.Models.Users", b =>
                 {
                     b.HasOne("SchoolProject.Models.Parents", "Parent")
-                        .WithMany("Users")
-                        .HasForeignKey("ParentId")
-                        .HasConstraintName("FK_dbo.Users_dbo.Parents_ParentId");
+                        .WithMany()
+                        .HasForeignKey("ParentId");
 
                     b.HasOne("SchoolProject.Models.Principals", "Principal")
-                        .WithMany("Users")
-                        .HasForeignKey("PrincipalId")
-                        .HasConstraintName("FK_dbo.Users_dbo.Principals_PrincipalId");
+                        .WithMany()
+                        .HasForeignKey("PrincipalId");
 
                     b.HasOne("SchoolProject.Models.Teachers", "Teacher")
-                        .WithMany("Users")
-                        .HasForeignKey("TeacherId")
-                        .HasConstraintName("FK_dbo.Users_dbo.Teachers_TeacherId");
+                        .WithMany()
+                        .HasForeignKey("TeacherId");
                 });
 #pragma warning restore 612, 618
         }

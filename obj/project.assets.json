@@ -12256,11 +12256,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\gervv\\source\\repos\\SchoolProject\\SchoolProject.csproj",
+      "projectUniqueName": "C:\\Users\\gervv\\Desktop\\school z gita\\SchoolProject.csproj",
       "projectName": "SchoolProject",
-      "projectPath": "C:\\Users\\gervv\\source\\repos\\SchoolProject\\SchoolProject.csproj",
+      "projectPath": "C:\\Users\\gervv\\Desktop\\school z gita\\SchoolProject.csproj",
       "packagesPath": "C:\\Users\\gervv\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\gervv\\source\\repos\\SchoolProject\\obj\\",
+      "outputPath": "C:\\Users\\gervv\\Desktop\\school z gita\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
