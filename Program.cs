@@ -31,10 +31,6 @@ namespace SchoolProject
 
                     var configuration = services.GetRequiredService<IConfiguration>();
 
-                    Seed.CreateRoles(serviceProvider, configuration).Wait();
-
-
-
                 }
 
                 catch (Exception exception)
