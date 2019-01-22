@@ -9,5 +9,6 @@ namespace SchoolProject.ViewModels
         public PersonalDatas PersonalData { get; set; }
         public Addresses Address { get; set; }
         public Users User { get; set; }
+        public Qualifications Qualification { get; set; }
     }
 }
