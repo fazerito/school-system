@@ -78,112 +78,122 @@
         <dd>
             @Html.DisplayFor(model => model.PersonalData.Address.ZipCode)
         </dd>
-        @if (Model.Grades.Count > 0)
-        {
-            <div style="width: 70%">
-                <h5 onclick="grades()">Grades</h5>
-                <ul style="list-style-type: none; column-count: 4;  ">
-                    <div id="Grades" style="display: none">
-                        @foreach (var g in Model.Grades)
-                        {
-                            <li>
-                                @g.Subject.Name
-                            </li>
-                        }
-                        @foreach (var g in Model.Grades)
-                        {
-                            <li>
-                                @g.Value
-                            </li>
-                        }
-                        @foreach (var g in Model.Grades)
-                        {
-                            <li>
-                                @g.Note
-                            </li>
-                        }
-                        @foreach (var g in Model.Grades)
-                        {
-                            <li>
-                                @g.Date.ToShortDateString()
-                            </li>
-                        }
-                        </div>
-                </ul>
-            </div>
-        }
-        @if (Model.Attendances.Count > 0)
-        {
-            <div style="width: 70%">
-                <h5 onclick="attendances()">Attendances</h5>
-                <ul  style="list-style-type: none; column-count: 4;  ">
-                    <div id="Attendances" style="display: none">
-                        @foreach (var g in Model.Attendances)
-                        {
-                            <li>
-                                @g.Lesson.StartTime
-                                @g.Lesson.Date.ToShortDateString()
-                            </li>
-                        }
-                        @foreach (var g in Model.Attendances)
-                        {
-                            @switch (@g.Lesson.DayOfWeek)
+
+        <dd>
+            @if (Model.Grades.Count > 0)
+            {
+                <div style="width: 70%">
+                    <h5 onclick="grades()">Grades</h5>
+                    <ul style="list-style-type: none; column-count: 4;  ">
+                        <div id="Grades" style="display: none">
+                            @foreach (var g in Model.Grades)
                             {
-                                case 1:
-                                    <li>
-                                        Poniedzialek
-                                    </li>
-                                    break;
-                                case 2:
-                                    <li>
-                                        Wtorek
-                                    </li>
-                                    break;
-                                case 3:
-                                    <li>
-                                        Sroda
-                                    </li>
-                                    break;
-                                case 4:
-                                    <li>
-                                        Czwartek
-                                    </li>
-                                    break;
-                                case 5:
-                                    <li>
-                                        Piatek
-                                    </li>
-                                    break;
-                                case 6:
-                                    <li>
-                                        Sobota
-                                    </li>
-                                    break;
-                                case 7:
-                                    <li>
-                                        Niedziela
-                                    </li>
-                                    break;
-
-
+                                <li>
+                                    @g.Subject.Name
+                                </li>
                             }
-                        }
-                        @foreach (var g in Model.Attendances)
-                        {
-                            <li>
-                                @g.Lesson.Subject.Name
-                            </li>
-                        }
-                        @foreach (var g in Model.Attendances)
-                        {
-                            <li>
-                                @g.AttendanceType
-                            </li>
-                        }
-                    </div>
-                </ul>
-            </div>
-        }
+                            @foreach (var g in Model.Grades)
+                            {
+                                <li>
+                                    @g.Value
+                                </li>
+                            }
+                            @foreach (var g in Model.Grades)
+                            {
+                                <li>
+                                    @g.Note
+                                </li>
+                            }
+                            @foreach (var g in Model.Grades)
+                            {
+                                <li>
+                                    @g.Date.ToShortDateString()
+                                </li>
+                            }
+                        </div>
+                    </ul>
+                </div>
+            }
+            @if (Model.Attendances.Count > 0)
+            {
+                <div style="width: 70%">
+                    <h5 onclick="attendances()">Attendances</h5>
+                    <ul style="list-style-type: none; column-count: 4;  ">
+                        <div id="Attendances" style="display: none">
+                            @foreach (var g in Model.Attendances)
+                            {
+                                <li>
+                                    @g.Lesson.StartTime
+                                    @g.Lesson.Date.ToShortDateString()
+                                </li>
+                            }
+                            @foreach (var g in Model.Attendances)
+                            {
+                                switch (@g.Lesson.DayOfWeek)
+                                {
+                                    case 1:
+                                        <li>
+                                            Poniedzialek
+                                        </li>
+                                        break;
+                                    case 2:
+                                        <li>
+                                            Wtorek
+                                        </li>
+                                        break;
+                                    case 3:
+                                        <li>
+                                            Sroda
+                                        </li>
+                                        break;
+                                    case 4:
+                                        <li>
+                                            Czwartek
+                                        </li>
+                                        break;
+                                    case 5:
+                                        <li>
+                                            Piatek
+                                        </li>
+                                        break;
+                                    case 6:
+                                        <li>
+                                            Sobota
+                                        </li>
+                                        break;
+                                    case 7:
+                                        <li>
+                                            Niedziela
+                                        </li>
+                                        break;
+
+
+                                }
+                            }
+                            @foreach (var g in Model.Attendances)
+                            {
+                                <li>
+                                    @g.Lesson.Subject.Name
+                                </li>
+                            }
+                            @foreach (var g in Model.Attendances)
+                            {
+                                string obecnosc = "";
+                                if (g.AttendanceType == 1)
+
+                                { obecnosc = "Obecny"; }
+                                else if (g.AttendanceType == 2)
+                                { obecnosc = "Nieobecny"; }
+                                <li>
+                                    @obecnosc
+                                </li>
+                            }
+                        </div>
+                    </ul>
+                </div>
+            }
+        </dd>
+        
 
     </dl>
 </div>

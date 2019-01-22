@@ -1,0 +1,46 @@
+﻿@using SchoolProject.Models;
+
+@model IEnumerable<SchoolProject.Models.Parents>
+
+@{
+        ViewData["Title"] = "Parents";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+
+<h2>Parents</h2>
+
+<p>
+    <a asp-action="Create">Add parent</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Parent Name
+            </th>
+            <th>
+                Email
+            </th>
+            
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.PersonalData.FullName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PersonalData.Email)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ParentId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ParentId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ParentId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

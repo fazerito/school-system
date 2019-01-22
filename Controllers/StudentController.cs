@@ -29,6 +29,8 @@ namespace SchoolProject.Controllers
         [Route("students/get")]
         public IActionResult Index()
         {
+
+
             var students = _context.Students
                 .Include(s => s.Class)
                 .Include(s => s.PersonalData)
@@ -95,6 +97,21 @@ namespace SchoolProject.Controllers
         [Route("students/add")]
         public IActionResult Create()
         {
+            var teacherId = _context.Users
+                .Where(u => u.Login == User.Identity.Name)
+                .Select(u => u.TeacherId)
+                .FirstOrDefault();
+
+            var principalId = _context.Users
+                .Where(u => u.Login == User.Identity.Name)
+                .Select(u => u.PrincipalId)
+                .FirstOrDefault();
+
+            if (teacherId == null && principalId == null)
+            {
+                TempData["message"] = "Brak wymaganych uprawnien.";
+                return RedirectToAction("Index", "Home");
+            }
             ViewData["ClassId"] = new SelectList(_context.Classes, "ClassId", "Name");
             return View();
             //ViewData["ParentId"] = new SelectList(_context.Parents, "ParentId", "ParentId");
@@ -109,6 +126,22 @@ namespace SchoolProject.Controllers
         [Route("students/add")]
         public async Task<IActionResult> Create(StudentViewModel model)
         {
+            var teacherId = _context.Users
+                .Where(u => u.Login == User.Identity.Name)
+                .Select(u => u.TeacherId)
+                .FirstOrDefault();
+
+            var principalId = _context.Users
+                .Where(u => u.Login == User.Identity.Name)
+                .Select(u => u.PrincipalId)
+                .FirstOrDefault();
+
+            if (teacherId == null && principalId == null)
+            {
+                TempData["message"] = "Brak wymaganych uprawnien.";
+                return RedirectToAction("Index", "Home");
+            }
+
             if (ModelState.IsValid)
             { 
                 _context.Addresses.Add(model.Address);
@@ -132,16 +165,16 @@ namespace SchoolProject.Controllers
             {
                 return NotFound();
             }
+            var model = new StudentEditViewModel();
 
-            var students = await _context.Students.FindAsync(id);
-            if (students == null)
+            model.Student = await _context.Students.FindAsync(id);
+            if (model.Student == null)
             {
                 return NotFound();
             }
-            ViewData["ClassId"] = new SelectList(_context.Classes, "ClassId", "Name", students.ClassId);
-            ViewData["ParentId"] = new SelectList(_context.Parents, "ParentId", "ParentId", students.ParentId);
-            ViewData["PersonalDataId"] = new SelectList(_context.PersonalDatas, "PersonalDataId", "FirstName", students.PersonalDataId);
-            return View(students);
+            ViewData["ClassId"] = new SelectList(_context.Classes, "ClassId", "Name");
+
+            return View(model);
         }
 
         // POST: Student/Edit/5
@@ -149,24 +182,69 @@ namespace SchoolProject.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("StudentId,ParentId,ClassId,PersonalDataId")] Students students)
+        public async Task<IActionResult> Edit(int id, StudentEditViewModel model)
         {
-            if (id != students.StudentId)
+            if (id != model.Student.StudentId)
             {
                 return NotFound();
             }
 
+            model.Student = await _context.Students
+                .Include(s => s.PersonalData)
+                .Include(s => s.PersonalData.Address)
+                .FirstOrDefaultAsync(s => s.StudentId == id);
+
+            if (model.AptNumber != null)
+            {
+                model.Student.PersonalData.Address.AptNumber = model.AptNumber;
+            }
+            if (model.City != null)
+            {
+                model.Student.PersonalData.Address.City = model.City;
+            }
+            if (model.StreetName != null)
+            {
+                model.Student.PersonalData.Address.StreetName = model.StreetName;
+            }
+            if (model.StreetNumber != 0)
+            {
+                model.Student.PersonalData.Address.StreetNumber = model.StreetNumber;
+            }
+            if (model.StreetNumber != 0)
+            {
+                model.Student.PersonalData.Address.StreetNumber = model.StreetNumber;
+            }
+            if (model.ZipCode != null)
+            {
+                model.Student.PersonalData.Address.ZipCode = model.ZipCode;
+            }
+            if (model.FirstName != null)
+            {
+                model.Student.PersonalData.FirstName = model.FirstName;
+            }
+            if (model.LastName != null)
+            {
+                model.Student.PersonalData.LastName = model.LastName;
+            }
+            if (model.Email != null)
+            {
+                model.Student.PersonalData.Email = model.Email;
+            }
+            if (model.Class != null)
+            {
+                model.Student.Class = model.Class;
+            }
+
             if (ModelState.IsValid)
             {
-
                 try
                 {
-                    _context.Update(students);
+                    _context.Update(model.Student);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!StudentsExists(students.StudentId))
+                    if (!StudentsExists(model.Student.StudentId))
                     {
                         return NotFound();
                     }
@@ -175,12 +253,9 @@ namespace SchoolProject.Controllers
                         throw;
                     }
                 }
+                ViewData["ClassId"] = new SelectList(_context.Classes, "ClassId", "Name");
 
-                ViewData["ClassId"] = new SelectList(_context.Classes, "ClassId", "Name", students.ClassId);
-                ViewData["ParentId"] = new SelectList(_context.Parents, "ParentId", "ParentId", students.ParentId);
-                ViewData["PersonalDataId"] = new SelectList(_context.PersonalDatas, "PersonalDataId", "FirstName",
-                students.PersonalDataId);
-                return View(students);
+                return View(model);
             }
             return RedirectToAction(nameof(Index));
         }

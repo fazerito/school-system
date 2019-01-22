@@ -101,14 +101,9 @@ namespace SchoolProject.Controllers
                     {
                         return NotFound("login already exists");
                     }
-
-                    //var address = model.Address;
+    
                     context.Addresses.Add(model.Address);
-                    //var pdata = model.PersonalData;
-                    //pdata.Address = address;
-                    //context.PersonalDatas.Add(pdata);
-                    //var address = model.Address;
-                    //context.Addresses.Add(address);
+                   
                     await context.SaveChangesAsync();
 
                     var pdata = model.PersonalData;
@@ -196,6 +191,41 @@ namespace SchoolProject.Controllers
                 return View(teacher);
             }
                 
+        }
+
+        // GET: Teacher/Delete/5
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            using (var _context = new SchoolDbContext())
+            {
+                var teacher = await _context.Teachers
+                    .Include(p => p.PersonalData)
+                    .FirstOrDefaultAsync(m => m.TeacherId == id);
+                if (teacher == null)
+                {
+                    return NotFound();
+                }
+            
+                return View(teacher);
+            }     
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            using (var _context = new SchoolDbContext())
+            {
+                var teacher = await _context.Teachers.FindAsync(id);
+                _context.Teachers.Remove(teacher);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Get));
+            }
         }
     }
 }
